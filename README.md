@@ -1,4 +1,4 @@
-# Geostas-External-Adapter-Filecoin
+# Geostats-External-Adapter-Filecoin
 
 1. This external adapter can be deployed and used as the bridge on the Chainlink node. It's already deployed and serving on https://europe-west6-shamba-vpc-host-nonprod.cloudfunctions.net/geostats-adapter-filecoin.
 
