@@ -1,6 +1,6 @@
-# Geostats-External-Adapter-Filecoin
+# Geostas-External-Adapter-Filecoin
 
-1. This external adapter can be deployed and used as the bridge on the Chainlink node. It's already deployed and serving on https://europe-west6-shamba-vpc-host-nonprod.cloudfunctions.net/geostats-adapter-filecoin.
+1. This external adapter can be deployed and used as the bridge on the Chainlink node. It's already deployed and serving as POST request on http://165.232.134.108:5555/.
 
 2. The toml job spec (geo-consumer-spatial-data-filecoin_jobSpec.toml) can be deployed onto the Chainlink node. In that job spec, you can edit the "YOUR_ORACLE_CONTRACT_ADDRESS" by replacing it with your Oracle contract address and the name of the bridge (shamba-geostats-bridge-filecoin) with your deployed bridge name.
 
