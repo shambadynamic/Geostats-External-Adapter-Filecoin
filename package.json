@@ -11,12 +11,13 @@
     "dependencies": {
         "@google-cloud/functions-framework": "^2.1.0",
         "axios": "^0.24.0",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.0",
         "fs": "0.0.1-security",
         "web3.storage": "^3.5.7"
     },
     "devDependencies": {
-        "body-parser": "^1.19.0",
+        "body-parser": "^1.19.2",
         "chai": "^4.2.0",
         "eslint": "^7.0.0",
         "eslint-config-standard": "^14.1.1",
