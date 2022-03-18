@@ -16,8 +16,8 @@ contract GeospatialConsumer is ChainlinkClient, ConfirmedOwner {
     constructor() ConfirmedOwner(msg.sender) {
         setPublicChainlinkToken();
         //here we initialize the oracle address and jobids
-        oracle = YOUR_ORACLE_CONTRACT_ADDRESS;
-        jobId = "YOUR_CHAINLINK_NODE_JOB-ID";
+        oracle = "0xd5CEd81bcd8D8e06E6Ca67AB9988c92CA78EEfe6";    // YOUR_ORACLE_CONTRACT_ADDRES
+        jobId = "c073d653416343c8a9166a24a9ecc91b";               //YOUR_CHAINLINK_NODE_JOB-ID
         
     }
 
