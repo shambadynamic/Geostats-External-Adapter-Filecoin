@@ -12,4 +12,3 @@ To see the live demo visit:  http://shamba-geostats-filecoin.herokuapp.com/    (
 3. Then, the functionality of this external adapter (i.e., to store the request data, response data, contract address that is triggering the job, transaction hash etc onto the web3 IPFS/Filecoin storage) can be tested through the smart contract (geo-consumer-spatial-data-filecoin_smart-contract.sol), by calling the 'requestGeospatialData' function, then the successful response of the external adapter will be having the link of the web3 stored file like 
 https://bafybeieqpgkd44lzoddpqfp45ahd5ls7c2abizi4j7puqp4cgezqdqc3cy.ipfs.dweb.link/data.json
 
-4. Watch a video description of this implementation:  https://youtu.be/HNj9TkOzgns
