@@ -3,7 +3,7 @@
 
 To see the list of CIDs (content ids) for IPFS files used in this demo, visit http://165.232.134.108:5555/.
 
-To see the live demo visit:  http://shamba-geostats-filecoin.herokuapp.com/    (note its http  - not https)
+To see the live demo visit:  http://shamba-geostats-filecoin.herokuapp.com/    (note its http  - not https: if the app does not load remove the 's' from the URL on your browser)
 
 1. This external adapter can be deployed and used as the bridge on the Chainlink node. 
 
