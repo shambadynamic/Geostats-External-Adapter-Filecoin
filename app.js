@@ -203,7 +203,7 @@ const createRequest = (input, callback) => {
                                                 "data": {
                                                     "jobRunID": jobRunID,
                                                     "status": "success",
-                                                    "result": agg_x_value,
+                                                    "result": { "agg_x": agg_x_value, "cid": cid },
                                                     "message": `Data successfully uploaded to https://dweb.link/ipfs/${cid}`,
                                                     "statusCode": 200
                                                 }
@@ -253,12 +253,14 @@ const createRequest = (input, callback) => {
 
                                     var json_data = JSON.parse(data.toString());
                                     var json_data_url = json_data.urls[json_data.urls.length - 1].toString().replace('/data.json', '')
+                                    var url_arr = json_data_url.split('/')
+                                    var cid_value = url_arr[url_arr.length - 1]
                                     var res = {
                                         "status": 200,
                                         "data": {
                                             "jobRunID": jobRunID,
                                             "status": "success",
-                                            "result": agg_x_value,
+                                            "result": { "agg_x": agg_x_value, "cid": cid_value },
                                             "message": `Data successfully uploaded to ${json_data_url}`,
                                             "statusCode": 200
                                         }
@@ -311,7 +313,7 @@ const createRequest = (input, callback) => {
                                                     "data": {
                                                         "jobRunID": jobRunID,
                                                         "status": "success",
-                                                        "result": agg_x_value,
+                                                        "result": { "agg_x": agg_x_value, "cid": cid },
                                                         "message": `Data successfully uploaded to https://dweb.link/ipfs/${cid}`,
                                                         "statusCode": 200
                                                     }
@@ -404,7 +406,7 @@ const createRequest = (input, callback) => {
                                         "data": {
                                             "jobRunID": jobRunID,
                                             "status": "success",
-                                            "result": agg_x_value,
+                                            "result": { "agg_x": agg_x_value, "cid": cid },
                                             "message": `Data successfully uploaded to https://dweb.link/ipfs/${cid}`,
                                             "statusCode": 200
                                         }

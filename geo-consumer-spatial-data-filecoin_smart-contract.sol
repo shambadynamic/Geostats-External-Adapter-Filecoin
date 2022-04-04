@@ -1,46 +1,58 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
+
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
-contract GeospatialConsumer is ChainlinkClient, ConfirmedOwner {
-    using Chainlink for Chainlink.Request;
-    uint256 public constant ORACLE_PAYMENT = 0.1 * 10**19; // 1 LINK
-    int256 public currentData;
-    //declaring Shamba oracle address and jobid
-    address private oracle;
-    bytes32 private jobId;
-   
+contract GeospatialConsumer is ChainlinkClient {
+  using Chainlink for Chainlink.Request;
+
+  int256 public goospatial_data;
+  string public cid;
+  uint256 public total_oracle_calls = 0;
+
+  constructor(
+  ) {
+    setChainlinkToken(0xa36085F69e2889c224210F603D836748e7dC0088);
+    setChainlinkOracle(0xf4434feDd55D3d6573627F39fA39867b23f4Bf7F);
+  }
+
+  mapping(uint256 => string) cids;
+
+  function getCid(uint256 index)
+        public
+        view
+        returns (string memory)
+  {
+        return cids[index];
+  }
+
+  function requestGeospatialData(
+  )
+    public
+  {
+    bytes32 specId = "0f974a67ee7b4e77864ef8a7adc6147c";
+    uint256 payment = 1000000000000000000;
+    Chainlink.Request memory req = buildChainlinkRequest(specId, address(this), this.fulfillGeospatialData.selector);
     
-    //this is where we initialize state variables
-    constructor() ConfirmedOwner(msg.sender) {
-        setPublicChainlinkToken();
-        //here we initialize the oracle address and jobids
-        oracle = "0xd5CEd81bcd8D8e06E6Ca67AB9988c92CA78EEfe6";    // YOUR_ORACLE_CONTRACT_ADDRES
-        jobId = "c073d653416343c8a9166a24a9ecc91b";               //YOUR_CHAINLINK_NODE_JOB-ID
+    req.add("data", "{\"agg_x\": \"agg_min\", \"dataset_code\":\"COPERNICUS/S2_SR\", \"selected_band\":\"NDVI\", \"image_scale\":250.0, \"start_date\":\"2021-09-01\", \"end_date\":\"2021-09-10\", \"geometry\":{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"properties\":{\"id\":1},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[19.51171875,4.214943141390651],[18.28125,-4.740675384778361],[26.894531249999996,-4.565473550710278],[27.24609375,1.2303741774326145],[19.51171875,4.214943141390651]]]}}]}}");
         
-    }
+    sendOperatorRequest(req, payment);
+  }
 
+  function fulfillGeospatialData(
+    bytes32 requestId,
+    int256 geospatialData,
+    string calldata cidValue
+  )
+    public
+    recordChainlinkFulfillment(requestId)
+  {
 
-    //here we build the data request
-    function requestGeospatialData() public onlyOwner returns (bytes32 requestId) {
-        Chainlink.Request memory req = buildChainlinkRequest(
-            jobId,
-            address(this),
-            this.fulfillGeospatialData.selector
-        );
-        
-        req.add("data", "{\"agg_x\": \"agg_max\", \"dataset_code\":\"COPERNICUS/S2_SR\", \"selected_band\":\"NDVI\", \"image_scale\":250.0, \"start_date\":\"2021-09-01\", \"end_date\":\"2021-09-10\", \"geometry\":{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"properties\":{},\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[19.51171875,4.214943141390651],[18.28125,-4.740675384778361],[26.894531249999996,-4.565473550710278],[27.24609375,1.2303741774326145],[19.51171875,4.214943141390651]]]}}]}}");
-       
-        return sendChainlinkRequestTo(oracle, req, ORACLE_PAYMENT);
-    }
-
-    //This is the callback function
-    //currentData is the variable that holds the data from the oracle
-    function fulfillGeospatialData(bytes32 _requestId, int256 _data) public recordChainlinkFulfillment(_requestId)
-    {
-        currentData = _data;
-    }
-
+    goospatial_data = geospatialData;
+    
+    cid = cidValue;
+    cids[total_oracle_calls] = cid;
+    total_oracle_calls = total_oracle_calls + 1;
+  }
 
 }

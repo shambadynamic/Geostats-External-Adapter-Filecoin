@@ -1,7 +1,7 @@
 type = "directrequest"
 schemaVersion = 1
-name = "geo-consumer-spatial-data-filecoin"
-contractAddress = "YOUR_ORACLE_CONTRACT_ADDRESS"
+name = "shamba-geostats-data-filecoin"
+contractAddress = "YOUR_OPERATOR_CONTRACT_ADDRESS"
 maxTaskDuration = "0s"
 observationSource = """
     decode_log   [type="ethabidecodelog"
@@ -10,14 +10,14 @@ observationSource = """
                   topics="$(jobRun.logTopics)"]
 
     decode_cbor  [type="cborparse" data="$(decode_log.data)"]
-    fetch        [method=POST type="bridge" name="shamba-geostats-bridge-filecoin" requestData="{\\"id\\": $(jobSpec.externalJobID),  \\"tx_hash\\": $(jobRun.logTxHash), \\"contract_address\\": $(decode_log.callbackAddr), \\"data\\":$(decode_cbor.data)}"]
+    fetch        [type="bridge" name="shamba-geostats-bridge-filecoin" requestData="{\\"id\\": $(jobSpec.externalJobID), \\"tx_hash\\": $(jobRun.logTxHash), \\"contract_address\\": $(decode_log.callbackAddr), \\"operator_address\\": $(jobRun.logAddress), \\"data\\":$(decode_cbor.data)}"]
     parse        [type="jsonparse" path="result" data="$(fetch)"]
-    encode_data  [type="ethabiencode" abi="(int256 value)" data="{ \\"value\\": $(parse) }"]
+    encode_data  [type="ethabiencode" abi="(bytes32 requestId, int256 agg_x, string calldata cid)" data="{ \\"requestId\\": $(decode_log.requestId), \\"agg_x\\": $(parse.agg_x), \\"cid\\": $(parse.cid) }"]
     encode_tx    [type="ethabiencode"
-                  abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)"
+                  abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
                   data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
                  ]
-    submit_tx    [type="ethtx" to="YOUR_ORACLE_CONTRACT_ADDRESS" data="$(encode_tx)"]
+    submit_tx    [type="ethtx" to="YOUR_OPERATOR_CONTRACT_ADDRESS" data="$(encode_tx)"]
 
     decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx
 """
