@@ -74,6 +74,7 @@ const createRequest = (input, callback) => {
     const jobRunID = input['id']
     var tx_hash = ''
     var contract_address = ''
+    var operator_address = ''
 
     if ('tx_hash' in input) {
         tx_hash = input['tx_hash']
@@ -81,6 +82,10 @@ const createRequest = (input, callback) => {
 
     if ('contract_address' in input) {
         contract_address = input['contract_address']
+    }
+
+    if ('operator_address' in input) {
+        operator_address = input['operator_address']
     }
 
     const endpoint = 'statistics'
@@ -140,6 +145,7 @@ const createRequest = (input, callback) => {
                         [agg_x]: agg_x_value,
                         "result": agg_x_value,
                         "contract_address": contract_address,
+                        "operator_address": operator_address,
                         "tx_hash": tx_hash
                     }
                 }
